@@ -200,11 +200,20 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
             paintPageSheet(painter, pageRect, pageContentRect, page->isOdd(), opt.printPageBackground);
 
             // Draw page elements
-            painter->setClipping(true);
-            painter->setClipRect(pageRect);
+            bool disableClipping = false;
+
+            if (!painter->hasClipping()) {
+                painter->setClipping(true);
+                painter->setClipRect(pageRect);
+                disableClipping = true;
+            }
+
             std::vector<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
             engraving::Paint::paintElements(*painter, elements, opt.isPrinting);
-            painter->setClipping(false);
+
+            if (disableClipping) {
+                painter->setClipping(false);
+            }
 
 #ifdef ENGRAVING_PAINT_DEBUGGER_ENABLED
             if (!opt.isPrinting) {
