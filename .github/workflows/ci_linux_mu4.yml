@@ -172,6 +172,10 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/linux/dumpsyms.sh  
+    - name: Make ccache world readable
+      if: env.DO_BUILD == 'true'
+      run: |
+        sudo chmod -R +r /root/.cache
     - name: Package 
       if: env.DO_BUILD == 'true'
       run: |
