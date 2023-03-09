@@ -42,7 +42,7 @@ jobs:
     - name: Ccache cache files
       uses: actions/cache@v3
       with:
-        path: ~/.ccache
+        path: /root/.ccache
         key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
         restore-keys: ${{github.workflow}}-ccache-  # restore ccache from either previous build on this branch or on master  
     - name: Setup ccache
