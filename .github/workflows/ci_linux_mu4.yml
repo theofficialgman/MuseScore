@@ -175,8 +175,8 @@ jobs:
     - name: Make ccache world readable
       if: env.DO_BUILD == 'true'
       run: |
-        sudo chown -R 1001:1001 /root/.ccache
-        sudo chmod -R +r /root/.ccache
+        sudo chown -R runner:runner /root/.ccache
+        sudo chmod -R ugo+rwx /root/.ccache
         ls -l /root/.ccache
     - name: Package 
       if: env.DO_BUILD == 'true'
