@@ -46,11 +46,13 @@ jobs:
     - name: Ccache cache files
       uses: actions/cache@v3
       with:
-        path: /root/.ccache
+        path: /tmp/.ccache
         key: ${{github.workflow}}-ccache-${{env.NOW}}
-        restore-keys: ${{github.workflow}}-ccache-  # restore ccache from either previous build on this branch or on master  
+        restore-keys: ${{github.workflow}}-ccache-  # restore ccache from either previous build on this branch or on master
     - name: Setup ccache
       run: |
+        sudo rm -rf /root/.ccache
+        sudo mv /tmp/.ccache /root
         sudo bash ./build/ci/tools/setup_ccache.sh     
     - name: "Configure workflow"
       env:
@@ -172,12 +174,13 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/linux/dumpsyms.sh  
-    - name: Make ccache world readable
+    - name: Move ccache back to /tmp
       if: env.DO_BUILD == 'true'
       run: |
-        sudo chown -R runner:runner /root/.ccache
-        sudo chmod -R ugo+rwx /root/.ccache
-        ls -l /root/.ccache
+        sudo mv /root/.ccache /tmp
+        sudo chown -R runner:runner /tmp/.ccache
+        sudo chmod -R ugo+rwx /tmp/.ccache
+        ls -l /tmp/.ccache
     - name: Package 
       if: env.DO_BUILD == 'true'
       run: |
