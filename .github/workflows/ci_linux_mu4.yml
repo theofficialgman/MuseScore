@@ -52,7 +52,7 @@ jobs:
     - name: Setup ccache
       run: |
         sudo rm -rf /root/.ccache
-        sudo mv /tmp/.ccache /root
+        [ -d "/tmp/.ccache" ] && sudo mv /tmp/.ccache /root
         sudo bash ./build/ci/tools/setup_ccache.sh     
     - name: "Configure workflow"
       env:
