@@ -51,6 +51,7 @@ jobs:
         restore-keys: ${{github.workflow}}-ccache-  # restore ccache from either previous build on this branch or on master
     - name: Setup ccache
       run: |
+        sudo apt install ccache -y
         sudo rm -rf /root/.ccache
         [ -d "/tmp/.ccache" ] && sudo mv /tmp/.ccache /root
         sudo bash ./build/ci/tools/setup_ccache.sh     
@@ -177,6 +178,7 @@ jobs:
     - name: Move ccache back to /tmp
       if: env.DO_BUILD == 'true'
       run: |
+        sudo ls -l /root/.ccache
         sudo mv /root/.ccache /tmp
         sudo chown -R runner:runner /tmp/.ccache
         sudo chmod -R ugo+rwx /tmp/.ccache
