@@ -178,6 +178,8 @@ jobs:
     - name: Move ccache back to /tmp
       if: env.DO_BUILD == 'true'
       run: |
+        ccache -s
+        sudo ccache -s
         sudo ls -l /root/.ccache
         sudo mv /root/.ccache /tmp
         sudo chown -R runner:runner /tmp/.ccache
