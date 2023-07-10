@@ -23,6 +23,9 @@ jobs:
   build_armhf:
     runs-on: ubuntu-22.04
     container: ubuntu:18.04
+    defaults:
+      run:
+        shell: bash
     steps:
     - name: Install dependencies into dockerfile on Ubuntu
       run: |
