@@ -63,6 +63,7 @@ fi
 
 apt_packages=(
   curl
+  cimg-dev
   desktop-file-utils
   file
   fuse
@@ -72,6 +73,7 @@ apt_packages=(
   patchelf
   pkg-config
   software-properties-common # installs `add-apt-repository`
+  argagg-dev
   unzip
   wget
   xxd
@@ -82,7 +84,6 @@ apt_packages=(
   )
 
 apt_packages_dev=(
-  cimg-dev
   libboost-dev
   libboost-filesystem-dev
   libboost-regex-dev
@@ -103,7 +104,6 @@ apt_packages_dev=(
   zlib1g-dev
   libglib2.0-dev
   librsvg2-dev
-  argagg-dev
   libgcrypt20-dev
   libcurl4-openssl-dev
   )
