@@ -51,21 +51,24 @@ echo "echo 'Setup MuseScore build environment'" >> $ENV_FILE
 
 # DISTRIBUTION PACKAGES
 
+sed -i "s/^deb/deb [arch=amd64,i386]/g" /etc/apt/sources.list
+echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ bionic main universe multiverse restricted" | tee -a /etc/apt/sources.list
+echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ bionic-security main universe multiverse restricted" | tee -a /etc/apt/sources.list
+echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ bionic-updates main universe multiverse restricted" | tee -a /etc/apt/sources.list
+if [ "$PACKARCH" == "armv7l" ]; then
+  dpkg --add-architecture armhf
+else
+  dpkg --add-architecture arm64
+fi
+
 apt_packages=(
-  cimg-dev
   curl
   desktop-file-utils
   file
   fuse
   git
   gpg
-  libboost-dev
-  libboost-filesystem-dev
-  libboost-regex-dev
-  libcairo2-dev
-  libfuse-dev
   libtool
-  libssl-dev
   patchelf
   pkg-config
   software-properties-common # installs `add-apt-repository`
@@ -73,6 +76,20 @@ apt_packages=(
   wget
   xxd
   p7zip-full
+  make
+  desktop-file-utils # installs `desktop-file-validate` for appimagetool
+  zsync # installs `zsyncmake` for appimagetool
+  )
+
+apt_packages_dev=(
+  cimg-dev
+  libboost-dev
+  libboost-filesystem-dev
+  libboost-regex-dev
+  libcairo2-dev
+  libfuse-dev
+  libtool
+  libssl-dev
   libasound2-dev 
   libfontconfig1-dev
   libfreetype6-dev
@@ -84,9 +101,6 @@ apt_packages=(
   libpulse-dev
   libsndfile1-dev
   zlib1g-dev
-  make
-  desktop-file-utils # installs `desktop-file-validate` for appimagetool
-  zsync # installs `zsyncmake` for appimagetool
   libglib2.0-dev
   librsvg2-dev
   argagg-dev
@@ -119,16 +133,26 @@ apt_packages_runtime=(
 
 apt_packages_ffmpeg=(
   ffmpeg
-  libavcodec-dev 
+  )
+
+apt_packages_ffmpeg_dev=(
+  libavcodec-dev
   libavformat-dev 
   libswscale-dev
   )
 
 apt-get update # no package lists in Docker image
-DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get install -y --no-install-recommends \
-  "${apt_packages[@]}" \
-  "${apt_packages_runtime[@]}" \
-  "${apt_packages_ffmpeg[@]}"
+if [ "$PACKARCH" == "armv7l" ]; then
+  DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get install -y --no-install-recommends \
+    "${apt_packages[@]}" "${apt_packages_dev[@]/%/:armhf}" \
+    "${apt_packages_runtime[@]}" \
+    "${apt_packages_ffmpeg[@]}" "${apt_packages_ffmpeg[@]/%/:armhf}"
+else
+  DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get install -y --no-install-recommends \
+    "${apt_packages[@]}" "${apt_packages_dev[@]/%/:arm64}" \
+    "${apt_packages_runtime[@]}" \
+    "${apt_packages_ffmpeg[@]}" "${apt_packages_ffmpeg[@]/%/:arm64}"
+fi
 
 # Add additional ppa (Qt 5.15.2 and CMake)
 wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
