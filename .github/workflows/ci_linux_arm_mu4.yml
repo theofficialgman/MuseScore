@@ -60,6 +60,8 @@ jobs:
         sudo bash ./build/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
+        echo 1
+
         DO_PUBLISH='false'
         if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly_build" ]]; then 
           DO_PUBLISH='true'
@@ -69,6 +71,8 @@ jobs:
           fi  
         fi
 
+        echo 2
+
         DO_BUILD='true'
         if [ "$BUILD_MODE" == "nightly_build" ]; then 
           if [ "${{ github.repository }}" != "musescore/MuseScore" ]; then 
@@ -76,12 +80,16 @@ jobs:
           fi
         fi
 
+        echo 3
+
         DO_PLACEHOLDER_TRANSLATIONS='false'
         if [[ "$DO_BUILD" == "true" ]]; then
           if [[ "$BUILD_MODE" == "nightly_build" || "$BUILD_MODE" == "devel_build" ]]; then
             DO_PLACEHOLDER_TRANSLATIONS='true'
           fi
         fi
+
+        echo 4
 
         DO_UPLOAD_SYMBOLS='false'
         SENTRY_PROJECT=${{ github.event.inputs.sentry_project }}
@@ -98,15 +106,21 @@ jobs:
           fi
         fi
 
+        echo 5
+
         if [ "$SENTRY_PROJECT" == "sandbox" ] && [ ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} != 0 ]; then 
           DO_UPLOAD_SYMBOLS='true'
           SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
         fi
 
+        echo 6
+
         if [ $DO_BUILD == 'false' ]; then
           DO_UPLOAD_SYMBOLS='false'
           DO_PUBLISH='false'
         fi
+
+        echo 7
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
