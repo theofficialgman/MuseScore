@@ -146,9 +146,17 @@ git config --global --add safe.directory /MuseScore
 # COMPILER
 apt_packages_compiler=(
   automake
-  gcc
-  g++
+  gcc-9
+  g++-9
+  binutils
   )
+
+echo "export CC=gcc-9 \
+CPP=cpp-9 \
+CXX=g++-9" >> ${ENV_FILE}
+export CC=gcc-9 \
+CPP=cpp-9 \
+CXX=g++-9
 
 apt-get install -y --no-install-recommends \
   "${apt_packages_compiler[@]}"
