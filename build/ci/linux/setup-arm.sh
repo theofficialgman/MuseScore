@@ -247,7 +247,6 @@ if [ "$PACKARCH" == "armv7l" ]; then
     qt515remoteobjects:armhf
     qt515svg:armhf
     qt515tools:armhf
-    qt515translations
     qt515wayland:armhf
     qt515x11extras:armhf
     qt515xmlpatterns:armhf
@@ -264,7 +263,6 @@ else
     qt515remoteobjects:arm64
     qt515svg:arm64
     qt515tools:arm64
-    qt515translations
     qt515wayland:arm64
     qt515x11extras:arm64
     qt515xmlpatterns:arm64
