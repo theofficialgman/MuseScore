@@ -107,23 +107,24 @@ apt_packages_dev=(
   libgcrypt20-dev
   libcurl4-openssl-dev
   libgpg-error-dev
+  libegl1-mesa-dev
+  libgles2-mesa-dev
+  libpq-dev
+  libxcomposite-dev
+  libxcursor-dev
+  libxtst-dev
+  libdrm-dev
+  libxi-dev
+  libjpeg-dev
   )
 
 # MuseScore compiles without these but won't run without them
 apt_packages_runtime=(
   libcups2
   libdbus-1-3
-  libegl1-mesa-dev
-  libgles2-mesa-dev
   libodbc1
-  libpq-dev
-  libxcomposite-dev
-  libxcursor-dev
-  libxi-dev
   libxkbcommon-x11-0
   libxrandr2
-  libxtst-dev
-  libdrm-dev
   libxcb-icccm4
   libxcb-image0
   libxcb-keysyms1
