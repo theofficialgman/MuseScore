@@ -144,17 +144,14 @@ git config --global --add safe.directory /MuseScore
 ##########################################################################
 
 # COMPILER
-apt_packages_compiler=(
-  automake
-  gcc
-  g++
-  gcc-8
-  g++-8
-  gfortran-8
-  binutils
-  )
-
 if [ "$PACKARCH" == "armv7l" ]; then
+  apt_packages_compiler=(
+    automake
+    gcc-8-arm-linux-gnueabihf
+    g++-8-arm-linux-gnueabihf
+    gfortran-8-arm-linux-gnueabihf
+    binutils-arm-linux-gnueabihf
+    )
   echo "export AS=/usr/bin/arm-linux-gnueabihf-as \
 AR=/usr/bin/arm-linux-gnueabihf-ar \
 CC=/usr/bin/arm-linux-gnueabihf-gcc-8 \
@@ -172,6 +169,13 @@ PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig" >> ${ENV_FILE}
   FC=/usr/bin/arm-linux-gnueabihf-gfortran-8 \
   PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig
 else
+  apt_packages_compiler=(
+    automake
+    gcc-8-aarch64-linux-gnu
+    g++-8-aarch64-linux-gnu
+    gfortran-8-aarch64-linux-gnu
+    binutils-aarch64-linux-gnu
+    )
   echo "export AS=/usr/bin/aarch64-linux-gnu-as \
 AR=/usr/bin/aarch64-linux-gnu-ar \
 CC=/usr/bin/aarch64-linux-gnu-gcc-8 \

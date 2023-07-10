@@ -22,7 +22,22 @@ env:
 jobs:
   build_armhf:
     runs-on: ubuntu-22.04
+    container: ubuntu:18.04
     steps:
+    - name: Install dependencies into dockerfile on Ubuntu
+      run: |
+        # ubuntu dockerfile is very minimal (only 122 packages are installed)
+        # add dependencies expected by scripts
+        apt update
+        apt install -y software-properties-common lsb-release \
+        sudo wget curl build-essential jq autoconf automake \
+        pkg-config ca-certificates rpm
+        # install new enough git to run actions/checkout
+        sudo add-apt-repository ppa:git-core/ppa -y
+        sudo apt update
+        sudo apt install -y git
+        # avoid "fatal: detected dubious ownership in repository" error
+        git config --global --add safe.directory '*'
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.11.0
       with:
@@ -35,8 +50,6 @@ jobs:
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
       with:
         ref: ${{ env.CURRENT_RELEASE_BRANCH }}
-    - name: setup QEMU
-      uses: docker/setup-qemu-action@v2
     - name: "Configure workflow"
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
@@ -125,13 +138,12 @@ jobs:
       run: |
         YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }}; if [ -z "$YT_API_KEY" ]; then YT_API_KEY="''"; fi
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        sudo docker run -i -v "${PWD}:/MuseScore" "arm32v7/ubuntu:bionic" /bin/bash -c "cd /MuseScore && \
-        bash /MuseScore/build/ci/linux/setup-arm.sh --arch armv7l && \
-        bash /MuseScore/build/ci/translation/run_lrelease.sh && \
-        bash /MuseScore/build/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --youtube_api_key $YT_API_KEY --crash_log_url $C_URL --arch armv7l && \
-        bash ./build/ci/linux/dumpsyms.sh && \
-        bash /MuseScore/build/ci/linux/package.sh --arch armv7l && \
-        bash /MuseScore/build/ci/tools/checksum.sh"
+        sudo bash ./build/ci/linux/setup-arm.sh --arch armv7l && \
+        sudo bash ./build/ci/translation/run_lrelease.sh && \
+        sudo bash ./build/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --youtube_api_key $YT_API_KEY --crash_log_url $C_URL --arch armv7l && \
+        sudo bash ./build/ci/linux/dumpsyms.sh && \
+        sudo bash ./build/ci/linux/package.sh --arch armv7l && \
+        sudo bash ./build/ci/tools/checksum.sh"
     - name: Upload dump symbols
       if: env.DO_UPLOAD_SYMBOLS == 'true'
       run: |
@@ -149,7 +161,22 @@ jobs:
 
   build_arm64:
     runs-on: ubuntu-22.04
+    container: ubuntu:18.04
     steps:
+    - name: Install dependencies into dockerfile on Ubuntu
+      run: |
+        # ubuntu dockerfile is very minimal (only 122 packages are installed)
+        # add dependencies expected by scripts
+        apt update
+        apt install -y software-properties-common lsb-release \
+        sudo wget curl build-essential jq autoconf automake \
+        pkg-config ca-certificates rpm
+        # install new enough git to run actions/checkout
+        sudo add-apt-repository ppa:git-core/ppa -y
+        sudo apt update
+        sudo apt install -y git
+        # avoid "fatal: detected dubious ownership in repository" error
+        git config --global --add safe.directory '*'
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.11.0
       with:
@@ -162,8 +189,6 @@ jobs:
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
       with:
         ref: ${{ env.CURRENT_RELEASE_BRANCH }}
-    - name: setup QEMU
-      uses: docker/setup-qemu-action@v2
     - name: "Configure workflow"
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
@@ -245,13 +270,12 @@ jobs:
       run: |
         YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }}; if [ -z "$YT_API_KEY" ]; then YT_API_KEY="''"; fi
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        sudo docker run -i -v "${PWD}:/MuseScore" "arm64v8/ubuntu:bionic" /bin/bash -c "cd /MuseScore && \
-        bash /MuseScore/build/ci/linux/setup-arm.sh --arch aarch64 && \
-        bash /MuseScore/build/ci/translation/run_lrelease.sh && \
-        bash /MuseScore/build/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --youtube_api_key $YT_API_KEY --crash_log_url $C_URL --arch aarch64 && \
-        bash ./build/ci/linux/dumpsyms.sh && \
-        bash /MuseScore/build/ci/linux/package.sh --arch aarch64 && \
-        bash /MuseScore/build/ci/tools/checksum.sh"
+        sudo bash ./build/ci/linux/setup-arm.sh --arch aarch64 && \
+        sudo bash ./build/ci/translation/run_lrelease.sh && \
+        sudo bash ./build/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --youtube_api_key $YT_API_KEY --crash_log_url $C_URL --arch aarch64 && \
+        sudo bash ./build/ci/linux/dumpsyms.sh && \
+        sudo bash ./build/ci/linux/package.sh --arch aarch64 && \
+        sudo bash ./build/ci/tools/checksum.sh"
     - name: Upload dump symbols
       if: env.DO_UPLOAD_SYMBOLS == 'true'
       run: |
