@@ -213,22 +213,41 @@ ninja --version
 
 # Get newer Qt (only used cached version if it is the same)
 
-apt_packages_qt=(
-  qt515base
-  qt515declarative
-  qt515quickcontrols
-  qt515quickcontrols2
-  qt515graphicaleffects
-  qt515imageformats
-  qt515networkauth-no-lgpl
-  qt515remoteobjects
-  qt515svg
-  qt515tools
-  qt515translations
-  qt515wayland
-  qt515x11extras
-  qt515xmlpatterns
-  )
+if [ "$PACKARCH" == "armv7l" ]; then
+  apt_packages_qt=(
+    qt515base:armhf
+    qt515declarative:armhf
+    qt515quickcontrols:armhf
+    qt515quickcontrols2:armhf
+    qt515graphicaleffects:armhf
+    qt515imageformats:armhf
+    qt515networkauth-no-lgpl:armhf
+    qt515remoteobjects:armhf
+    qt515svg:armhf
+    qt515tools:armhf
+    qt515translations:armhf
+    qt515wayland:armhf
+    qt515x11extras:armhf
+    qt515xmlpatterns:armhf
+    )
+else
+  apt_packages_qt=(
+    qt515base:arm64
+    qt515declarative:arm64
+    qt515quickcontrols:arm64
+    qt515quickcontrols2:arm64
+    qt515graphicaleffects:arm64
+    qt515imageformats:arm64
+    qt515networkauth-no-lgpl:arm64
+    qt515remoteobjects:arm64
+    qt515svg:arm64
+    qt515tools:arm64
+    qt515translations:arm64
+    qt515wayland:arm64
+    qt515x11extras:arm64
+    qt515xmlpatterns:arm64
+    )
+fi
 
 apt-get install -y \
   "${apt_packages_qt[@]}"
