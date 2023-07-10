@@ -92,6 +92,7 @@ apt_packages=(
   argagg-dev
   libgcrypt20-dev
   libcurl4-openssl-dev
+  libgpg-error-dev
   )
 
 # MuseScore compiles without these but won't run without them
