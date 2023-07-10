@@ -146,12 +146,12 @@ if [ "$PACKARCH" == "armv7l" ]; then
   DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get install -y --no-install-recommends \
     "${apt_packages[@]}" "${apt_packages_dev[@]/%/:armhf}" \
     "${apt_packages_runtime[@]}" \
-    "${apt_packages_ffmpeg[@]}" "${apt_packages_ffmpeg[@]/%/:armhf}"
+    "${apt_packages_ffmpeg[@]}" "${apt_packages_ffmpeg_dev[@]/%/:armhf}"
 else
   DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get install -y --no-install-recommends \
     "${apt_packages[@]}" "${apt_packages_dev[@]/%/:arm64}" \
     "${apt_packages_runtime[@]}" \
-    "${apt_packages_ffmpeg[@]}" "${apt_packages_ffmpeg[@]/%/:arm64}"
+    "${apt_packages_ffmpeg[@]}" "${apt_packages_ffmpeg_dev[@]/%/:arm64}"
 fi
 
 # Add additional ppa (Qt 5.15.2 and CMake)
