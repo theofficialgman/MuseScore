@@ -148,7 +148,47 @@ apt_packages_compiler=(
   automake
   gcc
   g++
+  gcc-8
+  g++-8
+  gfortran-8
+  binutils
   )
+
+if [ "$PACKARCH" == "armv7l" ]; then
+  echo "export AS=/usr/bin/arm-linux-gnueabihf-as \
+AR=/usr/bin/arm-linux-gnueabihf-ar \
+CC=/usr/bin/arm-linux-gnueabihf-gcc-8 \
+CPP=/usr/bin/arm-linux-gnueabihf-cpp-8 \
+CXX=/usr/bin/arm-linux-gnueabihf-g++-8 \
+LD=/usr/bin/arm-linux-gnueabihf-ld \
+FC=/usr/bin/arm-linux-gnueabihf-gfortran-8 \
+PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig" >> ${ENV_FILE}
+  export AS=/usr/bin/arm-linux-gnueabihf-as \
+  AR=/usr/bin/arm-linux-gnueabihf-ar \
+  CC=/usr/bin/arm-linux-gnueabihf-gcc-8 \
+  CPP=/usr/bin/arm-linux-gnueabihf-cpp-8 \
+  CXX=/usr/bin/arm-linux-gnueabihf-g++-8 \
+  LD=/usr/bin/arm-linux-gnueabihf-ld \
+  FC=/usr/bin/arm-linux-gnueabihf-gfortran-8 \
+  PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig
+else
+  echo "export AS=/usr/bin/aarch64-linux-gnu-as \
+AR=/usr/bin/aarch64-linux-gnu-ar \
+CC=/usr/bin/aarch64-linux-gnu-gcc-8 \
+CPP=/usr/bin/aarch64-linux-gnu-cpp-8 \
+CXX=/usr/bin/aarch64-linux-gnu-g++-8 \
+LD=/usr/bin/aarch64-linux-gnu-ld \
+FC=/usr/bin/aarch64-linux-gnu-gfortran-8 \
+PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig" >> ${ENV_FILE}
+  export AS=/usr/bin/aarch64-linux-gnu-as \
+  AR=/usr/bin/aarch64-linux-gnu-ar \
+  CC=/usr/bin/aarch64-linux-gnu-gcc-8 \
+  CPP=/usr/bin/aarch64-linux-gnu-cpp-8 \
+  CXX=/usr/bin/aarch64-linux-gnu-g++-8 \
+  LD=/usr/bin/aarch64-linux-gnu-ld \
+  FC=/usr/bin/aarch64-linux-gnu-gfortran-8 \
+  PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
+fi
 
 apt-get install -y --no-install-recommends \
   "${apt_packages_compiler[@]}"
