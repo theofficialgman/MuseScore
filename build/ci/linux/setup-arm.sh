@@ -147,49 +147,38 @@ git config --global --add safe.directory /MuseScore
 # COMPILER
 apt_packages_compiler=(
   automake
-  gcc
-  g++
-  gcc-8
-  g++-8
-  gfortran-8
+  clang-10
+  llvm-10
+  lld-10
+  llvm-10-dev
+  libomp-10-dev
   binutils
   )
 
-if [ "$PACKARCH" == "armv7l" ]; then
-  echo "export AS=/usr/bin/arm-linux-gnueabihf-as \
-AR=/usr/bin/arm-linux-gnueabihf-ar \
-CC=/usr/bin/arm-linux-gnueabihf-gcc-8 \
-CPP=/usr/bin/arm-linux-gnueabihf-cpp-8 \
-CXX=/usr/bin/arm-linux-gnueabihf-g++-8 \
-LD=/usr/bin/arm-linux-gnueabihf-ld \
-FC=/usr/bin/arm-linux-gnueabihf-gfortran-8 \
-PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig" >> ${ENV_FILE}
-  export AS=/usr/bin/arm-linux-gnueabihf-as \
-  AR=/usr/bin/arm-linux-gnueabihf-ar \
-  CC=/usr/bin/arm-linux-gnueabihf-gcc-8 \
-  CPP=/usr/bin/arm-linux-gnueabihf-cpp-8 \
-  CXX=/usr/bin/arm-linux-gnueabihf-g++-8 \
-  LD=/usr/bin/arm-linux-gnueabihf-ld \
-  FC=/usr/bin/arm-linux-gnueabihf-gfortran-8 \
-  PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig
-else
-  echo "export AS=/usr/bin/aarch64-linux-gnu-as \
-AR=/usr/bin/aarch64-linux-gnu-ar \
-CC=/usr/bin/aarch64-linux-gnu-gcc-8 \
-CPP=/usr/bin/aarch64-linux-gnu-cpp-8 \
-CXX=/usr/bin/aarch64-linux-gnu-g++-8 \
-LD=/usr/bin/aarch64-linux-gnu-ld \
-FC=/usr/bin/aarch64-linux-gnu-gfortran-8 \
-PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig" >> ${ENV_FILE}
-  export AS=/usr/bin/aarch64-linux-gnu-as \
-  AR=/usr/bin/aarch64-linux-gnu-ar \
-  CC=/usr/bin/aarch64-linux-gnu-gcc-8 \
-  CPP=/usr/bin/aarch64-linux-gnu-cpp-8 \
-  CXX=/usr/bin/aarch64-linux-gnu-g++-8 \
-  LD=/usr/bin/aarch64-linux-gnu-ld \
-  FC=/usr/bin/aarch64-linux-gnu-gfortran-8 \
-  PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
-fi
+echo "export AS=llvm-as-10 \
+AR=llvm-ar-10 \
+CC=clang-10 \
+CPP=clang-cpp-10 \
+CXX=clang++-10 \
+LD=ld.lld-10 \
+NM=llvm-nm-10 \
+STRIP=llvm-strip-10 \
+OBJCOPY=llvm-objcopy-10 \
+OBJDUMP=llvm-objdump-10 \
+READELF=llvm-readelf-10 \
+DLLTOOL=llvm-dlltool-10" >> ${ENV_FILE}
+export AS=llvm-as-10 \
+AR=llvm-ar-10 \
+CC=clang-10 \
+CPP=clang-cpp-10 \
+CXX=clang++-10 \
+LD=ld.lld-10 \
+NM=llvm-nm-10 \
+STRIP=llvm-strip-10 \
+OBJCOPY=llvm-objcopy-10 \
+OBJDUMP=llvm-objdump-10 \
+READELF=llvm-readelf-10 \
+DLLTOOL=llvm-dlltool-10
 
 apt-get install -y --no-install-recommends \
   "${apt_packages_compiler[@]}"
