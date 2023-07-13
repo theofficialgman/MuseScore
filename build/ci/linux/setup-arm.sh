@@ -225,8 +225,6 @@ qt_dir="/opt/qt515"
 ##########################################################################
 # Compile and install nlohmann-json
 ##########################################################################
-export CFLAGS="-Wno-psabi"
-export CXXFLAGS="-Wno-psabi"
 CURRDIR=${PWD}
 cd /
 
@@ -402,8 +400,6 @@ echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
 echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
 echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
 echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
-echo export CFLAGS="-Wno-psabi" >> ${ENV_FILE}
-echo export CXXFLAGS="-Wno-psabi" >> ${ENV_FILE}
 
 ##########################################################################
 # POST INSTALL
