@@ -147,8 +147,11 @@ git config --global --add safe.directory /MuseScore
 apt_packages_compiler=(
   automake
   binutils
+  gcc
+  g++
   )
 
+# only use clang-13 to compile musescore and not dependencies that follow in this script
 echo "export AS=llvm-as-13 \
 AR=llvm-ar-13 \
 CC=clang-13 \
@@ -161,18 +164,6 @@ OBJCOPY=llvm-objcopy-13 \
 OBJDUMP=llvm-objdump-13 \
 READELF=llvm-readelf-13 \
 DLLTOOL=llvm-dlltool-13" >> ${ENV_FILE}
-export AS=llvm-as-13 \
-AR=llvm-ar-13 \
-CC=clang-13 \
-CPP=clang-cpp-13 \
-CXX=clang++-13 \
-LD=ld.lld-13 \
-NM=llvm-nm-13 \
-STRIP=llvm-strip-13 \
-OBJCOPY=llvm-objcopy-13 \
-OBJDUMP=llvm-objdump-13 \
-READELF=llvm-readelf-13 \
-DLLTOOL=llvm-dlltool-13
 
 apt-get install -y --no-install-recommends \
   "${apt_packages_compiler[@]}"
