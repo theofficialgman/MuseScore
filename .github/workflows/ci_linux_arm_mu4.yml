@@ -35,8 +35,9 @@ jobs:
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
       with:
         ref: ${{ env.CURRENT_RELEASE_BRANCH }}
-    - name: setup QEMU
-      uses: docker/setup-qemu-action@v2
+    - name: Register binfmt_misc entry for qemu-user-static 
+      run: |
+        docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
     - name: "Configure workflow"
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
@@ -162,8 +163,9 @@ jobs:
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
       with:
         ref: ${{ env.CURRENT_RELEASE_BRANCH }}
-    - name: setup QEMU
-      uses: docker/setup-qemu-action@v2
+    - name: Register binfmt_misc entry for qemu-user-static 
+      run: |
+        docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
     - name: "Configure workflow"
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
