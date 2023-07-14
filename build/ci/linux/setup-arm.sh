@@ -146,6 +146,8 @@ git config --global --add safe.directory /MuseScore
 # COMPILER
 apt_packages_compiler=(
   automake
+  gcc
+  g++
   clang-10
   llvm-10
   lld-10
@@ -154,6 +156,7 @@ apt_packages_compiler=(
   binutils
   )
 
+# only use clang-10 to compile musescore and not dependencies that follow in this script
 echo "export AS=llvm-as-10 \
 AR=llvm-ar-10 \
 CC=clang-10 \
@@ -166,18 +169,6 @@ OBJCOPY=llvm-objcopy-10 \
 OBJDUMP=llvm-objdump-10 \
 READELF=llvm-readelf-10 \
 DLLTOOL=llvm-dlltool-10" >> ${ENV_FILE}
-export AS=llvm-as-10 \
-AR=llvm-ar-10 \
-CC=clang-10 \
-CPP=clang-cpp-10 \
-CXX=clang++-10 \
-LD=ld.lld-10 \
-NM=llvm-nm-10 \
-STRIP=llvm-strip-10 \
-OBJCOPY=llvm-objcopy-10 \
-OBJDUMP=llvm-objdump-10 \
-READELF=llvm-readelf-10 \
-DLLTOOL=llvm-dlltool-10
 
 apt-get install -y --no-install-recommends \
   "${apt_packages_compiler[@]}"
