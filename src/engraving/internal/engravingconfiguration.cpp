@@ -53,7 +53,7 @@ static VoiceColor VOICE_COLORS[VOICES];
 
 static const Color UNLINKED_ITEM_COLOR = "#FF9300";
 
-void EngravingConfiguration::init()
+__attribute__((used)) void EngravingConfiguration::init()
 {
     static const Color DEFAULT_VOICE_COLORS[VOICES] {
         "#0065BF",
