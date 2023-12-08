@@ -136,12 +136,9 @@ DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get install -y --no-inst
   "${apt_packages_runtime[@]}" \
   "${apt_packages_ffmpeg[@]}"
 
-# Add additional ppas (Qt 5.15.2, Cmake, and patchelf)
+# Add additional ppa
 # Poor naming of the cmake ppa, this ppa has bionic/focal/jammy dists
 add-apt-repository --yes ppa:theofficialgman/cmake-bionic
-add-apt-repository --yes ppa:theofficialgman/opt-qt-5.15.2-focal-arm
-# minimum patchelf 0.12 needed for proper elf load memory alignment
-add-apt-repository --yes ppa:theofficialgman/patchelf
 apt-get update
 apt-get upgrade -y
 
@@ -176,30 +173,36 @@ ninja --version
 # GET QT
 ##########################################################################
 
-# Get newer Qt (only used cached version if it is the same)
-
 apt_packages_qt=(
-  qt515base
-  qt515declarative
-  qt515quickcontrols
-  qt515quickcontrols2
-  qt515graphicaleffects
-  qt515imageformats
-  qt515networkauth-no-lgpl
-  qt515remoteobjects
-  qt515svg
-  qt515tools
-  qt515translations
-  qt515wayland
-  qt515x11extras
-  qt515xmlpatterns
+  qtbase5-dev
+  qtbase5-private-dev
+  qttools5-dev
+  qttools5-dev-tools
+  libqt5svg5-dev
+  qtwayland5
+  qt5-gtk-platformtheme
+  qtquickcontrols2-5-dev
+  libqt5networkauth5-dev
+  qtdeclarative5-dev
+  libqt5xmlpatterns5-dev
+  libqt5x11extras5-dev
+  qml-module-qtquick-controls
+  qml-module-qtquick-controls2  
+  qml-module-qtquick-dialogs
+  qml-module-qtquick-extras
+  qml-module-qtquick-privatewidgets
+  qml-module-qtquick-templates2
+  qml-module-qtgraphicaleffects
   )
 
 apt-get install -y \
   "${apt_packages_qt[@]}"
 
-qt_version="5152"
-qt_dir="/opt/qt515"
+if [ "$PACKARCH" == "armv7l" ]; then
+  echo export LIB_PATH="/usr/lib/arm-linux-gnueabihf" >> ${ENV_FILE}
+else
+  echo export LIB_PATH="/usr/lib/aarch64-linux-gnu" >> ${ENV_FILE}
+fi
 
 ##########################################################################
 # Compile and install nlohmann-json
@@ -345,11 +348,6 @@ else
   echo export DUMPSYMS_BIN="$breakpad_dir/dump_syms" >> $ENV_FILE
 fi
 
-echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
-echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
-echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
-echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
-echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
 echo export CFLAGS="-Wno-psabi" >> ${ENV_FILE}
 echo export CXXFLAGS="-Wno-psabi" >> ${ENV_FILE}
 

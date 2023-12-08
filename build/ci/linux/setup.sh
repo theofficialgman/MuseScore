@@ -115,22 +115,32 @@ sudo apt-get install -y --no-install-recommends \
 # GET QT
 ##########################################################################
 
-# Get newer Qt (only used cached version if it is the same)
-qt_version="5152"
-qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
-if [[ ! -d "${qt_dir}" ]]; then
-  mkdir -p "${qt_dir}"
-  qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
-  wget -q --show-progress -O qt5.7z "${qt_url}"
-  7z x -y qt5.7z -o"${qt_dir}"
-fi
+apt_packages_qt=(
+  qtbase5-dev
+  qtbase5-private-dev
+  qttools5-dev
+  qttools5-dev-tools
+  libqt5svg5-dev
+  qtwayland5
+  qt5-gtk-platformtheme
+  qtquickcontrols2-5-dev
+  libqt5networkauth5-dev
+  qtdeclarative5-dev
+  libqt5xmlpatterns5-dev
+  libqt5x11extras5-dev
+  qml-module-qtquick-controls
+  qml-module-qtquick-controls2  
+  qml-module-qtquick-dialogs
+  qml-module-qtquick-extras
+  qml-module-qtquick-privatewidgets
+  qml-module-qtquick-templates2
+  qml-module-qtgraphicaleffects
+  )
 
-echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
-echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
-echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
-echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
-echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
+apt-get install -y \
+  "${apt_packages_qt[@]}"
 
+echo export LIB_PATH="/usr/lib/x86_64-linux-gnu" >> ${ENV_FILE}
 
 ##########################################################################
 # GET TOOLS

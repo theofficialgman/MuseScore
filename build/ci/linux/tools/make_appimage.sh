@@ -108,8 +108,8 @@ mv "${appdir}/bin/findlib" "${appdir}/../findlib"
 # Remove Qt plugins for MySQL and PostgreSQL to prevent
 # linuxdeploy-plugin-qt from failing due to missing dependencies.
 # SQLite plugin alone should be enough for our AppImage.
-# rm -f ${QT_PATH}/plugins/sqldrivers/libqsql{mysql,psql}.so
-qt_sql_drivers_path="${QT_PATH}/plugins/sqldrivers"
+# rm -f ${LIB_PATH}/qt5/plugins/sqldrivers/libqsql{mysql,psql}.so
+qt_sql_drivers_path="${LIB_PATH}/qt5/plugins/sqldrivers"
 qt_sql_drivers_tmp="/tmp/qtsqldrivers"
 mkdir -p "$qt_sql_drivers_tmp"
 mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
@@ -131,15 +131,16 @@ linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 # (at that time the linux deploy was updated). 
 # This is a hack, for the deployment of QtQuick/Controls.2 
 if [ ! -f ${appdir}/usr/lib/libQt5QuickControls2.so.5 ]; then
-    cp -r ${QT_PATH}/qml/QtQuick/Controls.2 ${appdir}/usr/qml/QtQuick/Controls.2
-    cp -r ${QT_PATH}/qml/QtQuick/Templates.2 ${appdir}/usr/qml/QtQuick/Templates.2
-    cp ${QT_PATH}/lib/libQt5QuickControls2.so.5 ${appdir}/usr/lib/libQt5QuickControls2.so.5 
-    cp ${QT_PATH}/lib/libQt5QuickTemplates2.so.5 ${appdir}/usr/lib/libQt5QuickTemplates2.so.5 
+    cp -r ${LIB_PATH}/qt5/qml/QtQuick/Controls.2 ${appdir}/usr/qml/QtQuick/Controls.2
+    cp -r ${LIB_PATH}/qt5/qml/QtQuick/Templates.2 ${appdir}/usr/qml/QtQuick/Templates.2
+    cp ${LIB_PATH}/libQt5QuickControls2.so.5 ${appdir}/usr/lib/libQt5QuickControls2.so.5 
+    cp ${LIB_PATH}/libQt5QuickTemplates2.so.5 ${appdir}/usr/lib/libQt5QuickTemplates2.so.5 
 fi
 
 # At an unknown point in time, the libqgtk3 plugin stopped being deployed
 if [ ! -f ${appdir}/plugins/platformthemes/libqgtk3.so ]; then
-  cp ${QT_PATH}/plugins/platformthemes/libqgtk3.so ${appdir}/plugins/platformthemes/libqgtk3.so 
+  mkdir -p ${appdir}/usr/plugins/platformthemes/
+  cp ${LIB_PATH}/qt5/plugins/platformthemes/libqgtk3.so ${appdir}/usr/plugins/platformthemes/libqgtk3.so 
 fi
 
 # The system must be used
@@ -241,7 +242,7 @@ done
 
 for file in "${additional_qt_components[@]}"; do
   mkdir -p "${appdir}/$(dirname "${file}")"
-  cp -Lr "${QT_PATH}/${file}" "${appdir}/${file}"
+  cp -Lr "${LIB_PATH}/qt5/${file}" "${appdir}/${file}"
 done
 
 for lib in "${additional_libraries[@]}"; do
