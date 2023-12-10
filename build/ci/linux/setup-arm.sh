@@ -281,8 +281,10 @@ $BUILD_TOOLS/linuxdeploy/linuxdeploy --list-plugins
 
 git clone https://github.com/AppImage/AppImageKit
 cd /AppImageKit/
-git checkout --recurse-submodules 13
+git checkout --recurse-submodules continuous
 git submodule update --init --recursive
+# upgrade builtin squashfs version to fix bugs building on newer compilers
+sed -i 's/4.4/4.6.1/g' cmake/dependencies.cmake
 mkdir -p build
 cd build
 cmake -DBUILD_TESTING=OFF ..
